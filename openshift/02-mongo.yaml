@@ -1,0 +1,38 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: mongo
+  namespace: formacion
+  labels:
+    app: mongo
+spec:
+  replicas: 1
+  selector:
+    app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      volumes:
+        - name: mongo-data
+          persistentVolumeClaim:
+            claimName: mongo-data
+      containers:
+        - resources:
+            limits:
+              cpu: '1'
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 256Mi
+          name: mongo
+          ports:
+            - containerPort: 27017
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+          image: mongo
+      restartPolicy: Always
