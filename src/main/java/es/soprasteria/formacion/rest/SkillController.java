@@ -55,6 +55,7 @@ public class SkillController {
       MediaType.APPLICATION_XML_VALUE
   })
   public ResponseEntity<SkillDto> findSkill(@PathVariable(name="nif") String nif) {
+    log.info("Looking for skills. NIF: {}", nif);
     SkillDto skill = skillService.getByNif(nif);
     if (skill == null) {
       return ResponseEntity.notFound().build();
